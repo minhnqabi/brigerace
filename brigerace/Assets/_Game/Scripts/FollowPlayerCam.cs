@@ -13,12 +13,12 @@ public class FollowPlayerCam : SingletonMonoBehaviour<FollowPlayerCam>
     private Vector3 mainRotation;
 
     public Vector3 currentCameraRoom;
-
+    Transform trans;
     // Start is called before the first frame update
     void Start()
     {
         cameraOffset = transform.position - player.transform.position;
-       
+        trans=transform;
     }
 
   
@@ -31,7 +31,7 @@ public class FollowPlayerCam : SingletonMonoBehaviour<FollowPlayerCam>
     {
 
         newPos = player.transform.position + cameraOffset;
-        transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * followSpeed);
+        trans.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * followSpeed);
 
     }
 }

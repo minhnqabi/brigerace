@@ -8,6 +8,7 @@ public class GenBrige : SingletonMonoBehaviour<GenBrige>
     public float brigeHigh,brigeWidth;
     GameObject brige;
     Vector3 startPosGenBrige;
+    public Transform tranRot;
     public Transform startTrans;
 
     // Start is called before the first frame update
@@ -16,6 +17,8 @@ public class GenBrige : SingletonMonoBehaviour<GenBrige>
         brige=GameConfig.instance.brige;
         startPosGenBrige=startTrans.position;
         this.Gen();
+        transform.rotation=tranRot.rotation;
+        
     }
     public void Gen()
     {
