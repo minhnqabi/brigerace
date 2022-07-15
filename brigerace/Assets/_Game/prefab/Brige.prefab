@@ -298,3 +298,4 @@ MonoBehaviour:
   brigeDetect: {fileID: 1965012434384245668}
   brigeStatusIsActive: 0
   brigeRender: {fileID: 651511593283018200}
+  brigeMesh: {fileID: 6505917834946987023}

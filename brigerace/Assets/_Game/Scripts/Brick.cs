@@ -7,19 +7,19 @@ public class Brick : MonoBehaviour
     public StepType owner;
     public Material[] player, mat1, mat2, none;
     public MeshRenderer brickMesh;
-    BoxCollider col;
+    public BoxCollider col;
+    bool isLv1;
     public Transform container;//lưu transform brick lấy từ đâu 
-    private void Start()
-    {
 
-        col = gameObject.GetComponent<BoxCollider>();
-    }
-    public void Setup(Vector3 pos, StepType _owner, Transform _tr = null)
+    public void Setup(Vector3 pos, StepType _owner, Transform _tr = null, bool _isLv1 = true)
     {
+        col.enabled = true;
+        isLv1 = _isLv1;
         if (_tr)
         {
             this.container = _tr;
         }
+
         transform.position = pos;
         owner = _owner;
         switch (owner)
@@ -42,7 +42,7 @@ public class Brick : MonoBehaviour
     }
     public void Remove()
     {
-        transform.parent=null;
+        transform.parent = null;
         SimplePool.Despawn(gameObject);
     }
     private void OnTriggerEnter(Collider other)
@@ -59,19 +59,21 @@ public class Brick : MonoBehaviour
 
         //     }
         // }
-        BrigeStackManager stackM = other.GetComponent<BrigeStackManager>();
+        //BrigeStackManager stackM = other.GetComponent<BrigeStackManager>();
+        BrigeStackManager stackM = Cache.GenCollectItems(other);
         if (stackM)
         {
             if (stackM.character == this.owner || this.owner == StepType.NONE)
             {
                 stackM.PushBrick(this);
                 col.enabled = false;
-                if(container)
+                if (container)
                 {
-                    GenBrick.instance.PushTransToStackBrickNull(container);
+                    GenBrick.instance.PushTransToStackBrickNull(container, isLv1);
                 }
 
             }
         }
     }
+
 }

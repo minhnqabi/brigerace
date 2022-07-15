@@ -7,6 +7,7 @@ public class GameConfig : SingletonMonoBehaviour<GameConfig>
     
     // Start is called before the first frame update
     public GameObject brige, brick;
+    public GameObject GateLv2;
     public Material[] player, mat1, mat2, none;
     public Material[] GetMatByType(StepType _t)
     {
@@ -29,6 +30,12 @@ public class GameConfig : SingletonMonoBehaviour<GameConfig>
     }
     private void Start() {
         Application.targetFrameRate=60;
+    }
+    public void HandleLv2Start()
+    {
+        GateLv2.GetComponent<BoxCollider>().isTrigger=false;
+        GateLv2.GetComponent<MeshRenderer>().enabled=false;
+        GenBrick.instance.StartGenBrickLevel2();
     }
 
 

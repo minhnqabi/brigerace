@@ -21,10 +21,6 @@ public class FollowPlayerCam : SingletonMonoBehaviour<FollowPlayerCam>
         trans=transform;
     }
 
-  
-
-    
-
     // Update is called once per frame
     Vector3 newPos;
     void Update()

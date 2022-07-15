@@ -71,5 +71,12 @@ public class PlayerController : SingletonMonoBehaviour<PlayerController>
         }
     }
     public BrigeStackManager brickM;
+    private void OnTriggerExit(Collider other) {
+        if(other.CompareTag(Config.TAG_GATE_LV2))
+        {
+            GenBrick.instance.AddOwnerToLv2(StepType.PLAYER);
+            GameConfig.instance.HandleLv2Start();
+        }
+    }
     
 }

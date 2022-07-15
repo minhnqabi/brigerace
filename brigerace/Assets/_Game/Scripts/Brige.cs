@@ -9,6 +9,7 @@ public class Brige : MonoBehaviour
     public bool brigeStatusIsActive = false;
     public GameObject brigeRender;
     BoxCollider brigeCol;
+    public MeshRenderer brigeMesh;
     private void Awake()
     {
         brigeCol = gameObject.GetComponent<BoxCollider>();
@@ -26,7 +27,8 @@ public class Brige : MonoBehaviour
         if (!brigeStatusIsActive)
         {
             brigeType=mng.character;
-            brigeRender.GetComponent<MeshRenderer>().materials=GameConfig.instance.GetMatByType(brigeType);
+            //brigeRender.GetComponent<MeshRenderer>().materials=GameConfig.instance.GetMatByType(brigeType);
+            brigeMesh.materials=GameConfig.instance.GetMatByType(brigeType);
             brigeRender.SetActive(true);
             brigeCol.enabled = true;
             brigeDetect.Hide();
