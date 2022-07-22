@@ -8,7 +8,7 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
     private void Awake()
     {
         instance = this as T;
-        if (isDontDestroy)
+        if(isDontDestroy)
         {
             DontDestroyOnLoad(this);
         }

@@ -12,11 +12,14 @@ public class GenBrick : SingletonMonoBehaviour<GenBrick>
     public List<StepType> ownersLevel2 = new List<StepType>();
     public float nextCheck = 1.0f;
     float mDelta = 0;
+    public Stack<Brick> stackBrickAi1, stackBrickAi2;
+
 
 
     private void Start()
     {
-
+        stackBrickAi1 = new Stack<Brick>();
+        stackBrickAi2 = new Stack<Brick>();
         this.Setup();
         StartCoroutine(IEGenBrick());
     }
@@ -26,8 +29,20 @@ public class GenBrick : SingletonMonoBehaviour<GenBrick>
         {
             GameObject brickObj = SimplePool.Spawn(GameConfig.instance.brick, v.position, Quaternion.identity);
             Brick _brick = brickObj.GetComponent<Brick>();
+            
             _brick.Setup(v.position, this.GetOwner(), v);
+            if(_brick.owner==StepType.AI1)
+            {
+                stackBrickAi1.Push(_brick);
+
+            }
+            else if(_brick.owner==StepType.AI2)
+            {
+                stackBrickAi2.Push(_brick);
+            }
+
         }
+        AiController.instance.ActiveAi();
     }
     public void PushTransToStackBrickNull(Transform _tr, bool isLv1 = true)
     {

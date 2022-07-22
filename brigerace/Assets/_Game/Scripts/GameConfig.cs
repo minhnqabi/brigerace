@@ -9,6 +9,7 @@ public class GameConfig : SingletonMonoBehaviour<GameConfig>
     public GameObject brige, brick;
     public GameObject GateLv2;
     public Material[] player, mat1, mat2, none;
+    
     public Material[] GetMatByType(StepType _t)
     {
         switch (_t)
@@ -37,6 +38,6 @@ public class GameConfig : SingletonMonoBehaviour<GameConfig>
         GateLv2.GetComponent<MeshRenderer>().enabled=false;
         GenBrick.instance.StartGenBrickLevel2();
     }
-
+   
 
 }

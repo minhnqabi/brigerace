@@ -12,7 +12,7 @@ public class PlayerController : SingletonMonoBehaviour<PlayerController>
     public float _spd, _moveRotate;
     public Animator anim;
     Transform trans;
-    public Transform moveCheck,groundCheck;
+    public Transform moveCheck, groundCheck;
     bool _isInGround, _isMoveFoward;
     public LayerMask groundMask;
     public LayerMask brigeMask;
@@ -31,14 +31,14 @@ public class PlayerController : SingletonMonoBehaviour<PlayerController>
 
     private void Update()
     {
-        if (groundCheck != null) _isInGround = Physics.Raycast(groundCheck.position, Vector3.down, 0.05f, groundMask);
-        if (moveCheck != null) _isMoveFoward = Physics.Raycast(moveCheck.position, Vector3.down, 10f, groundMask);
+        if (groundCheck != null) _isInGround = this.GroundCheck();
+        if (moveCheck != null) _isMoveFoward = this.MoveCheck(groundMask);
         if (_isInGround && velocity.y < 0)
         {
             velocity.y = -2f;
         }
         RaycastHit inf;
-        if (Physics.Raycast(moveCheck.position, Vector3.down, out inf, 10f, brigeMask))
+        if (Physics.Raycast(moveCheck.position, Vector3.down, out inf, Config.FLOAT_MOVE_CHECK, brigeMask))
         {
             BrigeDetect brigeD = inf.transform.gameObject.GetComponent<BrigeDetect>();
             if (brigeD)
@@ -71,12 +71,21 @@ public class PlayerController : SingletonMonoBehaviour<PlayerController>
         }
     }
     public BrigeStackManager brickM;
-    private void OnTriggerExit(Collider other) {
-        if(other.CompareTag(Config.TAG_GATE_LV2))
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag(Config.TAG_GATE_LV2))
         {
             GenBrick.instance.AddOwnerToLv2(StepType.PLAYER);
             GameConfig.instance.HandleLv2Start();
         }
     }
-    
+    public bool GroundCheck()
+    {
+        return Physics.Raycast(groundCheck.position, Vector3.down, Config.FLOAT_GROUND_CHECK, groundMask);
+    }
+    public bool MoveCheck(LayerMask _mask)
+    {
+        return Physics.Raycast(moveCheck.position, Vector3.down, Config.FLOAT_MOVE_CHECK, _mask);
+    }
+
 }
