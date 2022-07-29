@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : SingletonMonoBehaviour<PlayerController>
+public class PlayerController : Character
 {
 
     public Joystick joystick;
@@ -19,6 +19,7 @@ public class PlayerController : SingletonMonoBehaviour<PlayerController>
     public int brickNum;
     Vector3 velocity;
     float _gravity = -9.8f;
+    public BrigeStackManager brickM;
     private void Awake()
     {
         trans = transform;
@@ -31,36 +32,43 @@ public class PlayerController : SingletonMonoBehaviour<PlayerController>
 
     private void Update()
     {
-        if (groundCheck != null) _isInGround = this.GroundCheck();
-        if (moveCheck != null) _isMoveFoward = this.MoveCheck(groundMask);
-        if (_isInGround && velocity.y < 0)
+        if (!this.isFall)
         {
-            velocity.y = -2f;
-        }
-        RaycastHit inf;
-        if (Physics.Raycast(moveCheck.position, Vector3.down, out inf, Config.FLOAT_MOVE_CHECK, brigeMask))
-        {
-            BrigeDetect brigeD = inf.transform.gameObject.GetComponent<BrigeDetect>();
-            if (brigeD)
+            if (groundCheck != null) _isInGround = this.GroundCheck();
+            if (moveCheck != null) _isMoveFoward = this.MoveCheck(groundMask);
+            if (_isInGround && velocity.y < 0)
             {
+                velocity.y = -2f;
+            }
+            RaycastHit inf;
+            if (Physics.Raycast(moveCheck.position, Vector3.down, out inf, Config.FLOAT_MOVE_CHECK, brigeMask))
+            {
+                BrigeDetect brigeD = inf.transform.gameObject.GetComponent<BrigeDetect>();
+                if (brigeD)
+                {
 
-                ActiveStep(brigeD.brige);
-                //inf.transform.gameObject.SetActive(false);
+                    ActiveStep(brigeD.brige);
+                    //inf.transform.gameObject.SetActive(false);
+                }
+            }
+            if ((joystick.inputVector - Vector2.zero).sqrMagnitude > 0.1f)
+            {
+                _moveDirection = (transform.right * joystick.Horizontal + transform.forward * joystick.Vertical).normalized;
+                float _speed = _isMoveFoward ? _spd : 0;
+
+                controller.Move(_moveDirection * _speed * Time.deltaTime * joystick.rate);
+                _moveRotate = Mathf.Atan2(joystick.Horizontal, joystick.Vertical) * Mathf.Rad2Deg;
+                tran_Rotate.localRotation = Quaternion.Euler(new Vector3(0, _moveRotate, 0));
+                anim.SetFloat(Config.ANIM_VELOCITY, joystick.inputVector.magnitude);
+                velocity.y += _gravity * Time.deltaTime * 2;
+                controller.Move(velocity * Time.deltaTime);
+            }
+            else
+            {
+                anim.SetFloat(Config.ANIM_VELOCITY, 0);
             }
         }
-        if ((joystick.inputVector - Vector2.zero).sqrMagnitude > 0.1f)
-        {
-            _moveDirection = (transform.right * joystick.Horizontal + transform.forward * joystick.Vertical).normalized;
-            float _speed = _isMoveFoward ? _spd : 0;
 
-            controller.Move(_moveDirection * _speed * Time.deltaTime * joystick.rate);
-            _moveRotate = Mathf.Atan2(joystick.Horizontal, joystick.Vertical) * Mathf.Rad2Deg;
-            tran_Rotate.localRotation = Quaternion.Euler(new Vector3(0, _moveRotate, 0));
-
-        }
-        anim.SetFloat(Config.ANIM_VELOCITY, joystick.inputVector.magnitude);
-        velocity.y += _gravity * Time.deltaTime * 2;
-        controller.Move(velocity * Time.deltaTime);
     }
     public void ActiveStep(Brige br)
     {
@@ -70,13 +78,26 @@ public class PlayerController : SingletonMonoBehaviour<PlayerController>
             br.ActiveBrige(brickM);
         }
     }
-    public BrigeStackManager brickM;
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag(Config.TAG_GATE_LV2))
         {
             GenBrick.instance.AddOwnerToLv2(StepType.PLAYER);
             GameConfig.instance.HandleLv2Start();
+        }
+        if (other.CompareTag(Config.TAG_PLAYER))
+        {
+            BrigeStackManager bm = Cache.GenCollectItems(other);
+            if (bm.allBrick.Count > this.brickM.allBrick.Count)//nếu ai có nhiều gạch hơn thì player rơi gạch
+            {
+                this.brickM.FallBrick();
+            }
+            else
+            {
+                bm.FallBrick();
+            }
+            // brickM.FallBrick();
         }
     }
     public bool GroundCheck()

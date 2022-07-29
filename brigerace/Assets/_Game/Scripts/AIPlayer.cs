@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIPlayer : MonoBehaviour
+public class AIPlayer : Character
 {
     public NavMeshAgent agent;
     public BrigeStackManager BrickStackM;
@@ -11,8 +11,10 @@ public class AIPlayer : MonoBehaviour
     Brick targetBrick;
     Transform trans;
     public bool isActive = false;
+    
     public void Init()
     {
+        this.isPlayer=false;
         isActive = true;
         trans = transform;
         StartCoroutine(CheckStart());
@@ -50,5 +52,12 @@ public class AIPlayer : MonoBehaviour
             yield return null;
 
         }
+    }
+    
+    public override void Fall()
+    {
+        base.Fall();
+        agent.isStopped=true;
+        
     }
 }

@@ -13,3 +13,9 @@ public enum StepType
     AI1,
     AI2
 }
+public enum AnimState
+{
+    IDLE,
+    MOVE,
+    FALL
+}

@@ -13,6 +13,7 @@ public class GenBrick : SingletonMonoBehaviour<GenBrick>
     public float nextCheck = 1.0f;
     float mDelta = 0;
     public Stack<Brick> stackBrickAi1, stackBrickAi2;
+    public Transform allBrickContainer;
 
 
 
@@ -29,7 +30,7 @@ public class GenBrick : SingletonMonoBehaviour<GenBrick>
         {
             GameObject brickObj = SimplePool.Spawn(GameConfig.instance.brick, v.position, Quaternion.identity);
             Brick _brick = brickObj.GetComponent<Brick>();
-            
+            brickObj.transform.SetParent(allBrickContainer);
             _brick.Setup(v.position, this.GetOwner(), v);
             if(_brick.owner==StepType.AI1)
             {

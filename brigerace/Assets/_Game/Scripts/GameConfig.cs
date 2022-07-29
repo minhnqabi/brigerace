@@ -9,6 +9,7 @@ public class GameConfig : SingletonMonoBehaviour<GameConfig>
     public GameObject brige, brick;
     public GameObject GateLv2;
     public Material[] player, mat1, mat2, none;
+    public Transform nonBrickContainer;
     
     public Material[] GetMatByType(StepType _t)
     {
