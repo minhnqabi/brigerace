@@ -19,3 +19,9 @@ public enum AnimState
     MOVE,
     FALL
 }
+public enum AIState
+{
+    NONE,
+    COLLECT,
+    MOVENEXT,
+}

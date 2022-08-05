@@ -11,11 +11,10 @@ public class AiController : SingletonMonoBehaviour<AiController>
     // Update is called once per frame
     void Update()
     {
-        foreach( var ai in this.listAi)
-        {
-
-            ai.ActionUpdate();
-        }
+       for(int i=0;i<listAi.Count;i++)
+       {
+        listAi[i].ActionUpdate();
+       }
         
     }
     public void ActiveAi()

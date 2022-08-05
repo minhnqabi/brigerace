@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenBrige : SingletonMonoBehaviour<GenBrige>
+public class GenBrige : MonoBehaviour
 {
     public int brigeNum;
     public float brigeHigh,brigeWidth;
@@ -10,6 +10,7 @@ public class GenBrige : SingletonMonoBehaviour<GenBrige>
     Vector3 startPosGenBrige;
     public Transform tranRot;
     public Transform startTrans;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -28,8 +29,18 @@ public class GenBrige : SingletonMonoBehaviour<GenBrige>
             new Vector3(startPosGenBrige.x,startPosGenBrige.y+brigeHigh*i,startPosGenBrige.z+brigeWidth*i),
             Quaternion.identity);
             obj.transform.SetParent(transform);
+            obj.GetComponent<Brige>().Setup(this);
         }
 
+    }
+    Brige currentActiveBrige;
+    public Brige CurrentActiveBrige()
+    {
+        return currentActiveBrige;
+    }
+    public void ActiveBrige(Brige bridge)
+    {
+        this.currentActiveBrige=bridge;
     }
 
 }

@@ -20,13 +20,30 @@ public class BrigeStackManager : MonoBehaviour
         _br.transform.localRotation = Quaternion.identity;
 
         //ManageUI.instance.UpdateBrickCount(allBrick.Count);
+        if(allBrick.Count>3)
+        {
+            if(!_char.isPlayer)
+            {
+                _char.gameObject.GetComponent<AIPlayer>().GoToLevel2();
+            }
+        }
     }
     public void UseBrick()
     {
         if (allBrick.Count > 0)
         {
+            Debug.Log("vao day r");
             allBrick.Pop().Remove();
             // ManageUI.instance.UpdateBrickCount(allBrick.Count);
+        }
+        else 
+        {
+            Debug.Log("Back to collect1");
+            if(!_char.isPlayer)
+            {
+                Debug.Log("Back to collect");
+                _char.GetComponent<AIPlayer>().BackToCollect();
+            }
         }
     }
     public void FallBrick()

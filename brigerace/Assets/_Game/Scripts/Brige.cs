@@ -10,6 +10,7 @@ public class Brige : MonoBehaviour
     public GameObject brigeRender;
     BoxCollider brigeCol;
     public MeshRenderer brigeMesh;
+    public GenBrige genBrige;
     private void Awake()
     {
         brigeCol = gameObject.GetComponent<BoxCollider>();
@@ -18,8 +19,9 @@ public class Brige : MonoBehaviour
             brigeCol.enabled = false;
         }
     }
-    public void Setup()
+    public void Setup(GenBrige gb)
     {
+        this.genBrige=gb;
 
     }
     public void ActiveBrige(BrigeStackManager mng)
@@ -32,6 +34,7 @@ public class Brige : MonoBehaviour
             brigeRender.SetActive(true);
             brigeCol.enabled = true;
             brigeDetect.Hide();
+            genBrige.ActiveBrige(this);
         }
     }
 
